@@ -10,17 +10,47 @@
 
     <!-- p5.js --> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
-    <script src="js/sketch.js"></script>
+    <!--<script type="application/javascript" src="js/sketch.js"></script>-->
+    <script type="application/javascript" src="js/view.js"></script>
+    <script type="application/javascript" src="js/controller.js"></script>
 
 </head>
 
 <body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand" href="#">
+			<i class="far fa-hand-peace" id="nav-logo"></i>
+			Dancimation
+		</a>
+		<div class="collapse navbar-collapse" id="navbarNav">
+		    <div class="navbar-nav">
+		     	<a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+			    <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Help</a>
+		    </div>
+	  	</div>
+	</nav>
 
-	<h1> Dancimation in this nation! </h1>
+	<!-- TAB NAV --> 
+	<nav id="tab-bar">
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a id="intro-tab-btn" class="nav-item nav-link active" href="#intro" data-toggle="tab" role="tab" aria-controls="intro" aria-selected="true">Intro</a>
+            <a id="train-tab-btn" class="nav-item nav-link" href="#train-and-test" data-toggle="tab" role="tab" aria-controls="train-and-test" aria-selected="true">Train and Test</a>
+            <a id="create-tab-btn" class="nav-item nav-link" href="#dance-and-train" data-toggle="tab" role="tab" aria-controls="dance-and-train" aria-selected="false">Dance and Train</a>
+            <a id="share-tab-btn" class="nav-item nav-link" href="#animate" data-toggle="tab" role="tab" aria-controls="animate" aria-selected="false">Animate</a>
+        </div>
+    </nav>	
+
+	<!-- TAB 1: INTRO TM --> 
+	<!-- TAB 2: TRAIN MODEL --> 
+	<!-- TAB 3: DANCE & MODEL --> 
+	<!-- TAB 4: ANIMATE --> 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+    
+    <script> 
+    	controller.initialize();
+    </script>
 </body>
 </html>
