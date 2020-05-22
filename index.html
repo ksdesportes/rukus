@@ -2,15 +2,22 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Dancimation</title>
+    <title>Rukus</title>
     <link rel="stylesheet" href="main.css">
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/9fca868103.js" crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
     <!-- p5.js --> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
-    <!--<script type="application/javascript" src="js/sketch.js"></script>-->
+    
+    <!-- Tensor Flow stuffs --> 
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    
+    <!-- My Files --> 
     <script type="application/javascript" src="js/view.js"></script>
     <script type="application/javascript" src="js/controller.js"></script>
 
@@ -20,30 +27,108 @@
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 		<a class="navbar-brand" href="#">
 			<i class="far fa-hand-peace" id="nav-logo"></i>
-			Dancimation
+			Rukus
 		</a>
 		<div class="collapse navbar-collapse" id="navbarNav">
 		    <div class="navbar-nav">
-		     	<a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-			    <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Help</a>
 		    </div>
 	  	</div>
 	</nav>
 
-	<!-- TAB NAV --> 
-	<nav id="tab-bar">
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <a id="intro-tab-btn" class="nav-item nav-link active" href="#intro" data-toggle="tab" role="tab" aria-controls="intro" aria-selected="true">Intro</a>
-            <a id="train-tab-btn" class="nav-item nav-link" href="#train-and-test" data-toggle="tab" role="tab" aria-controls="train-and-test" aria-selected="true">Train and Test</a>
-            <a id="create-tab-btn" class="nav-item nav-link" href="#dance-and-train" data-toggle="tab" role="tab" aria-controls="dance-and-train" aria-selected="false">Dance and Train</a>
-            <a id="share-tab-btn" class="nav-item nav-link" href="#animate" data-toggle="tab" role="tab" aria-controls="animate" aria-selected="false">Animate</a>
-        </div>
-    </nav>	
+   
+    
 
-	<!-- TAB 1: INTRO TM --> 
-	<!-- TAB 2: TRAIN MODEL --> 
-	<!-- TAB 3: DANCE & MODEL --> 
-	<!-- TAB 4: ANIMATE --> 
+    <div class="container-fluid" id="mainContainer">
+        <div class="row">
+            <div class="col center slightPadding" id="mainVideoConatiner"> 
+                <div class="row">
+                    <div id="sketchContainer" class="center">
+                    </div>
+                </div>
+                <div class="row" id="videoCtrlContainer">
+                    <div class="col-1">
+                        <button type="button" class="btn btn-primary" id="playPauseBtn"><i class="fas fa-play"></i></button>
+                    </div>
+                    <div class="col" style="padding-top:5px;">
+                        <div class="row"> 
+                            <input  id="videoSlider" class="custom-range" type="range" min="0" max="200" />
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="text-primary ml-2 mt-1 valueSpan float-left" id="vidLocation">0:00:00.00</span>
+                            </div>
+                            <div class="col">
+                                <span class="text-primary ml-2 mt-1 valueSpan float-right" id="vidLocationNeg">0:00:00.00</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="text-primary ml-2 mt-1 valueSpan float-left" id="frameLocation">Frame: 0</span>
+                            </div>
+                            <div class="col center">
+                                <button type="button" class="btn btn-primary btn-sm" id="bckTenFramesBtn"><i class="fas fa-fast-backward"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm" id="bckFrameBtn"><i class="fas fa-step-backward"></i></button>
+                                <span class="text-primary">Nav</span>
+                                <button type="button" class="btn btn-primary btn-sm" id="fwdFrameBtn"><i class="fas fa-step-forward"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm" id="fwdTenFramesBtn"><i class="fas fa-fast-forward"></i></button>
+                            </div>
+                            <div class="col">
+                                <span class="text-primary ml-2 mt-1 valueSpan float-right" id="frameLocationNeg">0</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-1">
+                        <button type="button" class="btn btn-primary" id="replayBtn"><i class="fas fa-redo-alt"></i></button>
+                    </div>
+                </div>
+                <div class="row" id="frameNavContainer">
+                    <div class="center">
+                        
+                    </div>
+                </div>
+                <div class="row uploadContainer">
+                    <div class="col uploadContainer border rounded">
+                        <h5>Upload components</h5>
+                    
+                        <div class="row uploadContainer" id="vidFileUploadContainer">
+                            <span>Video to work with...</span>
+                            <div class="input-group">
+                              <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="videoFileUpload" accept="video/*">
+                                <label class="custom-file-label" for="videoFileUpload">Choose file</label>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row uploadContainer" id="modelLinkUploadContainer">
+                            <span>Paste ML model link from Teachable Machine site...</span>
+                            <span><small>(ex. https://teachablemachine.withgoogle.com/models/Lp16aC0Y2/)</small></span>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="inputModelLink" placeholder="Link to ML model" aria-label="Link to ML model" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" id="modelUploadBtn" type="button">Upload Model</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col slightPadding" id="mlModelDisplay">
+                <div>
+                    <h5>Model Estimation</h5>
+                </div>
+                <div class="slightPadding border rounded" id="modelGraphContainer">
+                    <p>Waiting for model and video to load...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <video class="video-fluid z-depth-1" id="uploadedVideo" loop controls muted>
+      <source src="" type="video/*" id="uploadedVideoSrc"/>
+    </video> -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
@@ -51,6 +136,7 @@
     
     <script> 
     	controller.initialize();
+
     </script>
 </body>
 </html>
